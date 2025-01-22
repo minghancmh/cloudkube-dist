@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="cloudkube",
-    version="0.16.1",
+    version="0.16.2",
     author="Chan Ming Han",
     email="chanminghan00@gmail.com",
     description="minikube for the cloud",
