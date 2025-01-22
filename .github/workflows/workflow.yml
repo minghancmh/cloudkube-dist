@@ -24,7 +24,10 @@ jobs:
       - name: Install bump for automatic versioning
         run: pip install bump
       - name: Bump Version
-        run: bump
+        run: |
+          TAG_VER=$(bump)
+          echo "TAG_VER=$TAG_VER" >> $GITHUB_ENV
+          echo "::set-output name=version::$TAG_VER"
       - name: Commit Version Bump
         run: |
           git config user.name "github-actions[bot]"
@@ -68,6 +71,7 @@ jobs:
       Sign the Python 🐍 distribution 📦 with Sigstore
       and upload them to GitHub Release
     needs:
+      - build
       - publish-to-pypi
     runs-on: ubuntu-latest
 
@@ -92,7 +96,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
           gh release create
-          "$GITHUB_REF_NAME"
+          "${{ needs.build.outputs.version }}"
           --repo "$GITHUB_REPOSITORY"
           --notes ""
       - name: Upload artifact signatures to GitHub Release
@@ -103,6 +107,5 @@ jobs:
         # sigstore-produced signatures and certificates.
         run: >-
           gh release upload
-          "$GITHUB_REF_NAME" dist/**
+          "${{ needs.build.outputs.version }}" dist/**
           --repo "$GITHUB_REPOSITORY"
-          --clobber
