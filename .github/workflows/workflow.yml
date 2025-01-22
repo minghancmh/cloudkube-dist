@@ -27,6 +27,7 @@ jobs:
         run: |
           TAG_VER=$(bump)
           echo "TAG_VER=$TAG_VER" >> $GITHUB_ENV
+          echo $GITHUB_ENV
           echo "::set-output name=version::$TAG_VER"
       - name: Commit Version Bump
         run: |
@@ -53,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/<package-name> # Replace <package-name> with your PyPI project name
+      url: https://pypi.org/p/cloudkube
     permissions:
       id-token: write # IMPORTANT: mandatory for trusted publishing
 
